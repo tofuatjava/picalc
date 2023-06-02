@@ -1,0 +1,24 @@
+specVersion: 0.35.0
+name: picalc
+runtime: quarkus
+registry: quay.io/tofuatwork
+image: quay.io/tofuatwork/picalc:latest
+imageDigest: sha256:ff6f163157de066c6b22663993461bc371098657af61f0d2290bff7e1025ed52
+created: 2023-06-02T17:20:18.813149421+02:00
+build:
+  builder: pack
+  buildEnvs:
+  - name: BP_NATIVE_IMAGE
+    value: "false"
+  - name: BP_MAVEN_BUILT_ARTIFACT
+    value: func.yaml target/quarkus-app/lib/ target/quarkus-app/*.jar target/quarkus-app/app/
+      target/quarkus-app/quarkus/
+  - name: BP_MAVEN_BUILD_ARGUMENTS
+    value: package -DskipTests=true -Dmaven.javadoc.skip=true -Dquarkus.package.type=fast-jar
+  - name: MAVEN_S2I_ARTIFACT_DIRS
+    value: target/quarkus-app
+  - name: S2I_SOURCE_DEPLOYMENTS_FILTER
+    value: lib quarkus-run.jar app quarkus
+  pvcSize: 256Mi
+deploy:
+  namespace: default
